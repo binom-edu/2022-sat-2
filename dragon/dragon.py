@@ -25,4 +25,7 @@ while gameOn:
     else:
         print('Глаза огромного дракона! К сожалению, вы проиграли...')
     
+    playAgain = input('Хотите сыграть еще? (y/n) ')
+    if playAgain.lower().startswith('n'):
+        gameOn = False
     
