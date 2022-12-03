@@ -11,6 +11,21 @@ def printFrame():
     print('Ошибки:', incorrect)
     print(frames[len(incorrect)])
 
+def getUserMove():
+    alf = 'абвгдежзийклмнопрстуфхцчшщъыьэюя'
+    while True:
+        s = input('Ваш ход: ').lower()
+        if len(s) != 1:
+            print('Нужно ввести ровно одну букву')
+            continue
+        if not s in alf:
+            print('Введена не буква')
+            continue
+        if s in correct or s in incorrect:
+            print('Эта буква уже была')
+            continue
+        return s
+
 frames = [
 '''
 ---------||
@@ -86,8 +101,17 @@ secret = random.choice(words)
 print('В И С Е Л И Ц А')
 print('Компьютер загадал слово (письменная принадлежность). Попробуйте отгадать его по буквам. У вас будет 6 шансов на ошибку.')
 
-secret = 'карандаш'
-correct = ['а', 'н']
-incorrect = ['п', 'ф', 'я']
+correct = []
+incorrect = []
 
-printFrame()
+gameOn = True
+while gameOn:
+    printFrame()
+    letter = getUserMove()
+    if letter in secret:
+        print('Верно!')
+        correct.append(letter)
+    else:
+        print('Такой буквы нет в слове')
+        incorrect.append(letter)
+    # нужно проверить, не закончена ли игра
