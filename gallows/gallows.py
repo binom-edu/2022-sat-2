@@ -26,6 +26,15 @@ def getUserMove():
             continue
         return s
 
+def checkVictory():
+    for letter in secret:
+        if not letter in correct:
+            return False
+    return True
+
+def checkLose():
+    return len(incorrect) == len(frames) - 1
+
 frames = [
 '''
 ---------||
@@ -114,4 +123,11 @@ while gameOn:
     else:
         print('Такой буквы нет в слове')
         incorrect.append(letter)
-    # нужно проверить, не закончена ли игра
+    if checkLose():
+        print('Вы проиграли. Было загадано слово ', secret)
+        printFrame()
+        gameOn = False
+    if checkVictory():
+        print('Поздравляем с победой!')
+        printFrame()
+        gameOn = False
