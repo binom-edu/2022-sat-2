@@ -10,7 +10,6 @@ def printBoard():
 def getUserMove(board):
     alf = '123456789'
     while True:
-        printBoard()
         s = input('Ваш ход (1-9): ')
         if len(s) != 1:
             print('Нужно ввести ровно одну цифру')
@@ -37,10 +36,37 @@ def selectUserTile():
 
 def checkVictory(board, tile):
     if board[1] == tile and board[2] == tile and board[3] == tile or \
-       board[4] == tile and ...
+       board[4] == tile and board[5] == tile and board[6] == tile or \
+       board[7] == tile and board[8] == tile and board[9] == tile or \
+       board[1] == tile and board[4] == tile and board[7] == tile or \
+       board[2] == tile and board[5] == tile and board[8] == tile or \
+       board[3] == tile and board[6] == tile and board[9] == tile or \
+       board[1] == tile and board[5] == tile and board[9] == tile or \
+       board[7] == tile and board[5] == tile and board[3] == tile:
+       return True
+    else:
+        return False
 
-# board = ['', ' ', ' ', ' ', ' ', 'X', ' ', 'O', 'X', 'O']
-# printBoard()
+def checkDraw(board):
+    for i in range(1, 10):
+        if board[i] == ' ':
+            return False
+    if checkVictory(board, userTile) or checkVictory(board, computerTile):
+        return False
+    return True
+
+def getComputerMove(board):
+    valid_moves = []
+    for i in range(1, 10):
+        if board[i] == ' ':
+            valid_moves.append(i)
+    return random.choice(valid_moves)
+
+def makeMove(board, move, tile):
+    board[move] = tile
+
+board = [' '] * 10
+printBoard()
 
 print('К Р Е С Т И К И - Н О Л И К И')
 userTile, computerTile = selectUserTile()
@@ -50,7 +76,25 @@ if turn == 'user':
 else:
     print('Первым ходит компьютер')
 
-
-userMove = getUserMove(board=board)
-board[userMove] = userTile
+gameOn = True
+while gameOn:
+    printBoard()
+    if turn == 'user':
+        userMove = getUserMove(board)
+        makeMove(board, userMove, userTile)
+        if checkVictory(board, userTile):
+            print('Поздравляем! Вы победили!')
+            gameOn = False
+        turn = 'computer'
+    else:
+        print('Ход компьютера:')
+        computerMove = getComputerMove(board)
+        makeMove(board, computerMove, computerTile)
+        if checkVictory(board, computerTile):
+            print('Победил компьютер')
+            gameOn = False
+        turn = 'user'
+    if checkDraw(board):
+        print('Ничья!')
+        gameOn = False
 printBoard()
