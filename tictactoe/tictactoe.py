@@ -55,12 +55,39 @@ def checkDraw(board):
         return False
     return True
 
+def getBoardCopy(boad):
+    res = []
+    for i in board:
+        res.append(i)
+    return res
+
 def getComputerMove(board):
     valid_moves = []
     for i in range(1, 10):
         if board[i] == ' ':
             valid_moves.append(i)
+    # пытаемся сделать выигрывающий ход
+    for i in valid_moves:
+        bc = getBoardCopy(board)
+        makeMove(bc, i, computerTile)
+        if checkVictory(bc, computerTile):
+            return i
+    # пытаемся сделать блокирующий ход
+    for i in valid_moves:
+        bc = getBoardCopy(board)
+        makeMove(bc, i, userTile)
+        if checkVictory(bc, userTile):
+            return i
+    if 5 in valid_moves:
+        return 5
+    corners = []
+    for i in [1, 3, 7, 9]:
+        if i in valid_moves:
+            corners.append(i)
+    if corners:
+        return random.choice(corners)
     return random.choice(valid_moves)
+
 
 def makeMove(board, move, tile):
     board[move] = tile
